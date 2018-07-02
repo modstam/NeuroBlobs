@@ -90,19 +90,21 @@ class NeuralNetwork {
         return nn;
     }
 
-    mutate() {
+    mutate(mutation_rate) {
         for (var i = 1; i < this.weights.length; i++) {
             this.weights[i].eleMap(mutation);
             this.biases[i].eleMap(mutation);
         }
+
+        function mutation(n) {
+            var prob = Math.random();
+            if (prob <= mutation_rate) {
+                return n += (Math.random() * 1) - 0.5;
+            }
+            return n;
+        }
     }
 
-    mutation(n) {
-        var prob = Math.random();
-        if (prob <= mutation_rate) {
-            return n += (Math.random() * 1) - 0.5;
-        }
-        return n;
-    }
+ 
 
 }
