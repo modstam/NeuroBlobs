@@ -1,12 +1,34 @@
 <html>
-  <head>
-    <script src="libs/linear-algebra.min.js"></script>
-    <script src="libs/p5.min.js"></script>
-    <script src="sketch.js"></script>
-    <script src="neuralnetwork.js"></script>    
-    <script src="evolution.js"></script>    
-    <script src="blob.js"></script>    
-  </head>
-  <body>
-  </body>
+
+<head>
+  <script src="libs/linear-algebra.min.js"></script>
+  <script src="libs/p5.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="neuralnetwork.js"></script>
+  <script src="evolution.js"></script>
+  <script src="blob.js"></script>
+</head>
+
+<body>
+  <div id="sketch" style="float:left">
+
+  </div>
+  <div id="info" class="text">
+    <p id="objective">Objective: Stay inside screen while moving as much as possible</p>
+    <h3 id="gen">Generation:</h3>
+    <h3 id="pop">Population:</h3>   
+    <h3 id="mut_rate">Mutation Rate:</h3>
+    <h3 id="max_time">Max time:</h3>
+  </div>
+</body>
+
 </html>
+
+<style>
+  .text {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 1rem;
+    padding-left: 20px;
+    float:left;
+  }
+</style>

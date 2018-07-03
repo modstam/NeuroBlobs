@@ -6,7 +6,7 @@ class Blob {
         this.size = size;
         this.x_velocity = 0;
         this.y_velocity = 0;
-        this.max_velocity = 5;
+        this.max_velocity = 10;
         this.isFood = isFood;
         this.fitness = 0;
         if (!isFood) {
@@ -45,13 +45,13 @@ class Blob {
             var input = [];
             input.push(this.x);
             input.push(this.y);
-            input.push(this.size);
-            for (var i = 0; i < blobs.length; i++) {
-                if (blobs[i].id == this.id) { continue }
-                input.push(blobs[i].x);
-                input.push(blobs[i].y);
-                input.push(blobs[i].size);
-            }
+            // input.push(this.size);
+            // for (var i = 0; i < blobs.length; i++) {
+            //     if (blobs[i].id == this.id) { continue }
+            //     input.push(blobs[i].x);
+            //     input.push(blobs[i].y);
+            //     input.push(blobs[i].size);
+            // }
             // console.log(input);
             var output = this.brain.feedForward(input);
             // console.log(output);
@@ -62,18 +62,6 @@ class Blob {
             this.y += this.y_velocity;
             // console.log(this);
         }
-
-    }
-
-    shouldEat(blob) {
-
-    }
-
-    eat(blob) {
-
-    }
-
-    detectCollision(population) {
 
     }
 

@@ -92,19 +92,60 @@ class NeuralNetwork {
 
     mutate(mutation_rate) {
         for (var i = 1; i < this.weights.length; i++) {
-            this.weights[i].eleMap(mutation);
-            this.biases[i].eleMap(mutation);
-        }
+            var weight = this.weights[i];
+            var bias = this.biases[i];
 
-        function mutation(n) {
-            var prob = Math.random();
-            if (prob <= mutation_rate) {
-                return n += (Math.random() * 1) - 0.5;
+            for (var row = 0; row < weight.rows; row++) {
+                for (var col = 0; col < weight.cols; col++) {
+                    var prob = random(1);
+                    if (prob < mutation_rate) {
+                        var newNumber = randomGaussian() * 0.5;
+                        weight.data[row][col] += newNumber;
+                    }
+                }
             }
-            return n;
+
+            for (var row = 0; row < bias.rows; row++) {
+                for (var col = 0; col < bias.cols; col++) {
+                    var prob = random(1);
+                    if (prob < mutation_rate) {
+                        var newNumber = randomGaussian() * 0.5;
+                        bias.data[row][col] += newNumber;
+                    }
+                }
+            }
         }
     }
 
- 
+    crossOver(otherNetwork) {
+        var clone = this.clone();
 
+        for (var i = 1; i < clone.weights.length; i++) {
+            var weight = clone.weights[i];
+            var bias = clone.biases[i];
+
+            var counter = 0;
+            for (var row = 0; row < weight.rows; row++) {
+                for (var col = 0; col < weight.cols; col++) {
+                    if (counter % 2 == 0) {
+                        //console.log("2 ;" + brain2.weights[i].data[row][col]);
+                        clone.weights[i].data[row][col] = otherNetwork.weights[i].data[row][col];
+                        counter++;
+                    }
+                }
+            }
+
+            for (var row = 0; row < bias.rows; row++) {
+                for (var col = 0; col < bias.cols; col++) {
+                    if (counter % 2 == 0) {
+                        //console.log("2 ;" + brain2.weights[i].data[row][col]);
+                        clone.biases[i].weight.data[row][col] = otherNetwork.bias[i].data[row][col];
+                        counter++;
+                    }
+                }
+            }
+
+        }
+        return clone;
+    }
 }
