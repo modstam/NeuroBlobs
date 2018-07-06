@@ -1,5 +1,5 @@
 var fitness_sum = 0;
-var mutation_rate = 0.10;
+var mutation_rate = 0.05;
 
 function selection(population) {
     blobs = modifyFitness(population);
@@ -34,7 +34,7 @@ function modifyFitness(blobs) {
     fitness_sum = 0;
     //console.log(blobs);
     for (var i = 0; i < blobs.length; i++) {
-        blobs[i].fitness = pow(blobs[i].fitness, 1.2);
+        blobs[i].fitness = pow(blobs[i].fitness, 1.5);
         fitness_sum += blobs[i].fitness;
     }
 

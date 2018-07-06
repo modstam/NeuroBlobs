@@ -11,7 +11,7 @@ var x_canvas_size = 500;
 var y_canvas_size = 500;
 
 var id_counter = 0;
-var max_time = 60000;
+var max_time = 30000;
 var current_time = 0;
 var current_gen = 0;
 
@@ -31,7 +31,7 @@ function setup() {
         var start = startPos();
         if (i < num_blobs) {
             // var nn = new NeuralNetwork([(population.length * 3), 5, 2]);
-            var nn = new NeuralNetwork([2, 8, 2]);
+            var nn = new NeuralNetwork([2, 8, 4]);
             population[i] = new Blob(id_counter, start[0], start[1], blob_start_size, false, nn);
         }
         else {
@@ -66,7 +66,9 @@ function draw() {
             continue;
         }
         if (isBlobAlive(blob)) {
-            blob.fitness += (Math.abs(blob.x_velocity) + Math.abs(blob.y_velocity)) * 0.01;
+            blob.fitness += (current_time*0.00001) + (Math.abs(blob.x_velocity) + Math.abs(blob.y_velocity)) * 0.01;
+            // blob.fitness += (current_time*0.001);
+            
         }
         else {
             //console.log("blob nr " + blob.id + " has died a tragic death..");

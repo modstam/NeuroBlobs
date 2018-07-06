@@ -20,23 +20,29 @@ class Blob {
     }
 
     calculateVelocity(currentVel, impulse) {
-        var vel = 0;
-        if (impulse >= 0.5) {
-            vel = impulse - 0.5;
-        }
-        else {
-            vel = 0 - (0.5 - impulse);
-        }
+        // var vel = (impulse - 0.5)*2;
+        // var absVel = Math.abs(currentVel + vel);
+        // if(absVel > this.max_velocity){
+        //     if (currentVel + vel > 0) {
+        //         return this.max_velocity;
+        //     }
+        //     else {
+        //         return -this.max_velocity;
+        //     }
+        // }
+        // return currentVel + vel;
 
-        if (this.max_velocity - Math.abs(currentVel + vel) >= 0.05) {
-            return currentVel + vel;
+        var absVel = Math.abs(currentVel + impulse);
+        if(absVel > this.max_velocity){
+            if (currentVel + impulse > 0) {
+                return this.max_velocity;
+            }
+            else {
+                return -this.max_velocity;
+            }
         }
-        else if (currentVel + vel >= 0) {
-            return this.max_velocity;
-        }
-        else {
-            return -this.max_velocity;
-        }
+        return currentVel + impulse;
+        
     }
 
     update(blobs) {
@@ -45,19 +51,15 @@ class Blob {
             var input = [];
             input.push(this.x);
             input.push(this.y);
-            // input.push(this.size);
-            // for (var i = 0; i < blobs.length; i++) {
-            //     if (blobs[i].id == this.id) { continue }
-            //     input.push(blobs[i].x);
-            //     input.push(blobs[i].y);
-            //     input.push(blobs[i].size);
-            // }
-            // console.log(input);
+            // input.push(this.x_velocity);
+            // input.push(this.y_velocity);
             var output = this.brain.feedForward(input);
             // console.log(output);
             // console.log(output.data[0][0]);
             // console.log(output.data[1][0]);
-            this.addVelocity(output.data[0][0], output.data[1][0]);
+            var x_impulse = output.data[0][0] - output.data[1][0];
+            var y_impulse = output.data[2][0] - output.data[3][0];
+            this.addVelocity(x_impulse, y_impulse);
             this.x += this.x_velocity;
             this.y += this.y_velocity;
             // console.log(this);
