@@ -6,7 +6,7 @@ class Blob {
         this.size = size;
         this.x_velocity = 0;
         this.y_velocity = 0;
-        this.max_velocity = 10;
+        this.max_velocity = 100;
         this.isFood = isFood;
         this.fitness = 0;
         if (!isFood) {

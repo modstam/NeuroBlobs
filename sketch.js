@@ -15,14 +15,16 @@ var max_time = 30000;
 var current_time = 0;
 var current_gen = 0;
 
+var survival_rate = 0.1;
 var deadBlobs = [];
+var mutation_rate = 0.05;
 
 function setup() {
     canvas = createCanvas(x_canvas_size, y_canvas_size);
     canvas.parent("sketch");
     document.getElementById("gen").innerHTML = ("Generation: " + current_gen);
-    document.getElementById("pop").innerHTML = ("Population: " + num_blobs);   
-    document.getElementById("mut_rate").innerHTML = ("Mutation Rate: " + (mutation_rate*100) + "%");
+    document.getElementById("pop").innerHTML = ("Population: " + num_blobs);
+    document.getElementById("mut_rate").innerHTML = ("Mutation Rate: " + (mutation_rate * 100) + "%");
     document.getElementById("max_time").innerHTML = ("Max Time: " + (max_time / 1000) + " sec");
 
     background(0);
@@ -66,9 +68,9 @@ function draw() {
             continue;
         }
         if (isBlobAlive(blob)) {
-            blob.fitness += (current_time*0.00001) + (Math.abs(blob.x_velocity) + Math.abs(blob.y_velocity)) * 0.01;
+            blob.fitness += (current_time * 0.00001) + ((pow(Math.abs(blob.x_velocity), 2) + pow(Math.abs(blob.y_velocity), 2))*0.001);
             // blob.fitness += (current_time*0.001);
-            
+
         }
         else {
             //console.log("blob nr " + blob.id + " has died a tragic death..");
@@ -87,9 +89,11 @@ function isBlobAlive(blob) {
 
 function createNewPopulation() {
     newPopulation = [];
+    var available_selection = modifyFitness(population, survival_rate);
+
     for (var i = 0; i < num_blobs; i++) {
-        var brain1 = selection(population);
-        var brain2 = selection(population);
+        var brain1 = selection(available_selection);
+        var brain2 = selection(available_selection);
 
         var childBlob = makeChild(brain1, brain2);
         //var childBlob = newBlob(brain1);

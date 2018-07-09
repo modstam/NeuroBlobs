@@ -1,8 +1,8 @@
 var fitness_sum = 0;
-var mutation_rate = 0.05;
 
 function selection(population) {
-    blobs = modifyFitness(population);
+    blobs = population;
+    // console.table(blobs);
 
     //credit to Daniel Shiffman @codingtrain
     // Start at 0
@@ -30,18 +30,27 @@ function selection(population) {
 }
 
 
-function modifyFitness(blobs) {
+function modifyFitness(blobs, survival_rate) {
     fitness_sum = 0;
     //console.log(blobs);
-    for (var i = 0; i < blobs.length; i++) {
-        blobs[i].fitness = pow(blobs[i].fitness, 1.5);
-        fitness_sum += blobs[i].fitness;
+
+    var culled_selection = blobs;
+    var culled_selection = blobs.sort(function (a, b) {
+        return b.fitness - a.fitness;
+    }).slice(0, num_blobs * survival_rate);
+    
+    
+
+    for (var i = 0; i < culled_selection.length; i++) {
+        culled_selection[i].fitness = pow(culled_selection[i].fitness, 1);
+        fitness_sum += culled_selection[i].fitness;
     }
 
-    for (var i = 0; i < blobs.length; i++) {
-        blobs[i].fitness /= fitness_sum;
+    for (var i = 0; i < culled_selection.length; i++) {
+        culled_selection[i].fitness /= fitness_sum;
     }
-    return blobs;
+    console.table(culled_selection);
+    return shuffle(culled_selection);
 }
 
 function makeChild(brain1, brain2) {
@@ -52,7 +61,7 @@ function makeChild(brain1, brain2) {
     return new Blob(id_counter, start[0], start[1], blob_start_size, false, childBrain);
 }
 
-function newBlob(brain) {
+function newBlob(brain, mutation_rate) {
     var start = startPos();
     brain.mutate(mutation_rate);
     return new Blob(id_counter, start[0], start[1], blob_start_size, false, brain);
