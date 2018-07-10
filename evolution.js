@@ -49,7 +49,7 @@ function modifyFitness(blobs, survival_rate) {
     for (var i = 0; i < culled_selection.length; i++) {
         culled_selection[i].fitness /= fitness_sum;
     }
-    console.table(culled_selection);
+    //console.table(culled_selection);
     return shuffle(culled_selection);
 }
 

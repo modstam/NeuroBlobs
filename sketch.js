@@ -15,9 +15,11 @@ var max_time = 30000;
 var current_time = 0;
 var current_gen = 0;
 
-var survival_rate = 0.1;
+var survival_rate = 0.50;
 var deadBlobs = [];
 var mutation_rate = 0.05;
+
+var best_fitness = 0;
 
 function setup() {
     canvas = createCanvas(x_canvas_size, y_canvas_size);
@@ -26,6 +28,7 @@ function setup() {
     document.getElementById("pop").innerHTML = ("Population: " + num_blobs);
     document.getElementById("mut_rate").innerHTML = ("Mutation Rate: " + (mutation_rate * 100) + "%");
     document.getElementById("max_time").innerHTML = ("Max Time: " + (max_time / 1000) + " sec");
+    document.getElementById("culling_rate").innerHTML = ("Top " + (survival_rate * 100) + "% survives");
 
     background(0);
     population = new Array(num_blobs + num_food);
@@ -70,7 +73,9 @@ function draw() {
         if (isBlobAlive(blob)) {
             blob.fitness += (current_time * 0.00001) + ((pow(Math.abs(blob.x_velocity), 2) + pow(Math.abs(blob.y_velocity), 2))*0.001);
             // blob.fitness += (current_time*0.001);
-
+            if(blob.fitness > best_fitness){
+                best_fitness = blob.fitness;
+            }
         }
         else {
             //console.log("blob nr " + blob.id + " has died a tragic death..");
@@ -79,6 +84,8 @@ function draw() {
         population[i].update(population);
         population[i].draw();
     }
+    document.getElementById("alive_blobs").innerHTML = ("Blobs alive: " + (num_blobs - deadBlobs.length));
+    document.getElementById("best_fitness").innerHTML = ("Best fitness: " + best_fitness);
 }
 
 function isBlobAlive(blob) {
