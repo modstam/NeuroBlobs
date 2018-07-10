@@ -76,4 +76,8 @@ class Blob {
         }
         ellipse(this.x, this.y, this.size * 2, this.size * 2);
     }
+
+    copy(){
+        return new Blob(this.id, this.x, this.y, this.size, this.isFood, this.brain.clone());
+    }
 }

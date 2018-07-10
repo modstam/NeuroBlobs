@@ -19,6 +19,7 @@ var survival_rate = 0.50;
 var deadBlobs = [];
 var mutation_rate = 0.05;
 
+var total_best_blob;
 var total_best_fitness = 0;
 var current_best_fitness = 0;
 var leader_id = -1;
@@ -46,6 +47,7 @@ function setup() {
         }
         id_counter++;
     }
+    total_best_blob = random(population);
 }
 
 function startPos() {
@@ -74,14 +76,15 @@ function draw() {
             continue;
         }
         if (isBlobAlive(blob)) {
-            blob.fitness += (current_time * 0.00001) + ((pow(Math.abs(blob.x_velocity), 2) + pow(Math.abs(blob.y_velocity), 2))*0.001);
+            blob.fitness += (current_time * 0.00001) + ((pow(Math.abs(blob.x_velocity), 2) + pow(Math.abs(blob.y_velocity), 2)) * 0.001);
             // blob.fitness += (current_time*0.001);
-            if(blob.fitness > current_best_fitness){
+            if (blob.fitness > current_best_fitness) {
                 current_best_fitness = blob.fitness;
                 leader_id = blob.id;
             }
-            if(blob.fitness > total_best_fitness){
+            if (blob.fitness > total_best_fitness) {
                 total_best_fitness = blob.fitness;
+                total_best_blob = blob;
             }
         }
         else {
@@ -92,7 +95,8 @@ function draw() {
         population[i].draw(leader_id);
     }
     document.getElementById("alive_blobs").innerHTML = ("Blobs alive: " + (num_blobs - deadBlobs.length));
-    document.getElementById("best_fitness").innerHTML = ("Best fitness: " + total_best_fitness);
+    document.getElementById("total_best_fitness").innerHTML = ("Total best fitness: " + total_best_fitness);
+    document.getElementById("current_best_fitness").innerHTML = ("Current best fitness: " + current_best_fitness);
 }
 
 function isBlobAlive(blob) {
@@ -103,8 +107,13 @@ function isBlobAlive(blob) {
 
 function createNewPopulation() {
     newPopulation = [];
-    var available_selection = modifyFitness(population, survival_rate);
 
+    var blob = total_best_blob.copy();
+    var bestBlobs = [blob];
+    population.concat(bestBlobs);
+
+
+    var available_selection = modifyFitness(population, survival_rate);
     for (var i = 0; i < num_blobs; i++) {
         var brain1 = selection(available_selection);
         var brain2 = selection(available_selection);
