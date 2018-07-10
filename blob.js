@@ -33,7 +33,7 @@ class Blob {
         // return currentVel + vel;
 
         var absVel = Math.abs(currentVel + impulse);
-        if(absVel > this.max_velocity){
+        if (absVel > this.max_velocity) {
             if (currentVel + impulse > 0) {
                 return this.max_velocity;
             }
@@ -42,7 +42,7 @@ class Blob {
             }
         }
         return currentVel + impulse;
-        
+
     }
 
     update(blobs) {
@@ -67,8 +67,13 @@ class Blob {
 
     }
 
-    draw() {
-        fill(255);
+    draw(leader_id) {
+        if (leader_id === this.id) {
+            fill(124, 252, 0);
+        }
+        else {
+            fill(255);
+        }
         ellipse(this.x, this.y, this.size * 2, this.size * 2);
     }
 }

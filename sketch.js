@@ -19,7 +19,9 @@ var survival_rate = 0.50;
 var deadBlobs = [];
 var mutation_rate = 0.05;
 
-var best_fitness = 0;
+var total_best_fitness = 0;
+var current_best_fitness = 0;
+var leader_id = -1;
 
 function setup() {
     canvas = createCanvas(x_canvas_size, y_canvas_size);
@@ -62,6 +64,7 @@ function draw() {
         current_gen++;
         document.getElementById("gen").innerHTML = ("Generation: " + current_gen);
         createNewPopulation();
+        current_best_fitness = 0;
     }
 
     for (var i = 0; i < population.length; i++) {
@@ -73,8 +76,12 @@ function draw() {
         if (isBlobAlive(blob)) {
             blob.fitness += (current_time * 0.00001) + ((pow(Math.abs(blob.x_velocity), 2) + pow(Math.abs(blob.y_velocity), 2))*0.001);
             // blob.fitness += (current_time*0.001);
-            if(blob.fitness > best_fitness){
-                best_fitness = blob.fitness;
+            if(blob.fitness > current_best_fitness){
+                current_best_fitness = blob.fitness;
+                leader_id = blob.id;
+            }
+            if(blob.fitness > total_best_fitness){
+                total_best_fitness = blob.fitness;
             }
         }
         else {
@@ -82,10 +89,10 @@ function draw() {
             deadBlobs.push(blob.id);
         }
         population[i].update(population);
-        population[i].draw();
+        population[i].draw(leader_id);
     }
     document.getElementById("alive_blobs").innerHTML = ("Blobs alive: " + (num_blobs - deadBlobs.length));
-    document.getElementById("best_fitness").innerHTML = ("Best fitness: " + best_fitness);
+    document.getElementById("best_fitness").innerHTML = ("Best fitness: " + total_best_fitness);
 }
 
 function isBlobAlive(blob) {
